@@ -1,7 +1,7 @@
-const express = require('express');
-const helmet = require('helmet');
+import express from 'express';
+import helmet from 'helmet';
 
-const fruitsRouter = require('../fruits/fruits-router.js');
+import fruitsRouter from '../fruits/router.js';
 
 const server = express();
 
@@ -10,4 +10,11 @@ server.use(express.json());
 
 server.use('/api/fruits', fruitsRouter);
 
-module.exports = server;
+server.use('/*', (req, res) => {
+  return res.status(404).json({ error: 'Path not found' });
+})
+
+server.use((err, req, res, next) => {
+  return res.status(500).json({ err });
+})
+export default server;
